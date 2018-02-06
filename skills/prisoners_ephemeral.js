@@ -1,4 +1,4 @@
-var choiceTimer = 20000;
+var choiceTimer = 10000;
 module.exports = function(controller) {
   
   
@@ -74,12 +74,13 @@ module.exports = function(controller) {
 			]);
           });
         setTimeout(function () {
-            bot.say({
+          bot.startConversation(message, function(err, convo){
+            convo.say({
               username: "Daedalus",
               channel: "C7V493SA3",
               ephemeral: true,
               text: "Sorry, but you were eliminated from the game. You won't get any prize money."
             });
-        }, choiceTimer);
+        }, choiceTimer);});
     });
 }
