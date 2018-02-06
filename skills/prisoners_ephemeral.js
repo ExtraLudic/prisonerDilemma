@@ -1,8 +1,10 @@
-var choiceTimer = 10000;
 module.exports = function(controller) {
+  var choiceTimer = 60;  
+  var Timer;
+  var bannedForTime = false;
   
-  
-  controller.hears(['test'], ["direct_message","direct_mention","mention","ambient"], function (bot, message){
+  controller.on('user_channel_join,user_group_join', function(bot, message) {
+        choiceTimer = 60;
         bot.startConversation(message, function(err, convo) {
             convo.say({
         ephemeral: true,
@@ -73,7 +75,12 @@ module.exports = function(controller) {
 				}
 			]);
           });
-        setTimeout(function () {
+        Timer = setInterval (function () {
+          if(choiceTimer > 0) {
+            choiceTimer -= 1;
+            console.log(choiceTimer);
+          }
+          else if(!bannedForTime){
           bot.startConversation(message, function(err, convo){
             convo.say({
               username: "Daedalus",
@@ -81,6 +88,11 @@ module.exports = function(controller) {
               ephemeral: true,
               text: "Sorry, but you were eliminated from the game. You won't get any prize money."
             });
-        }, choiceTimer);});
+          });
+            bannedForTime = true;
+            console.log("Done");
+            clearInterval(Timer);
+          }
+        }, 1000);
     });
 }
